@@ -1,0 +1,36 @@
+<!-- 这是构建模板。template/section 是本地分段标识，不能写入飞书。
+只将选定 section 的子节点序列化为 DocxXML。占位内容均需替换。 -->
+<template>
+  <section name="company-header">
+    <h1>岗位 JD</h1>
+    <h2>{岗位全称}｜{JD 版本或记录标识}</h2>
+    <p>公司：{确认的公司名}</p>
+    <p>JD 原文链接：<a href="{实际 JD URL}">{实际 JD URL}</a></p>
+    <p>{JD 原文首段；按原次序复制全部段落、列表、表格及链接}</p>
+  </section>
+  <section name="round">
+    <h1>{一面}（{HR／业务／技术面}）</h1>
+    <p>{岗位、JD 版本、可核实的日期}｜材料标识 {sha256}</p>
+  </section>
+  <section name="video-only">
+    <p>原视频 {序号}｜{原文件名}｜{本轮材料标识}｜{文件 SHA-256}</p>
+    <!-- 在此唯一锚点后单独插入真实媒体文件。 -->
+  </section>
+  <section name="question">
+    <h2>{可选 🔴 或 🟡}{题号或追问号}｜{面试官原话}</h2>
+    <pre lang="plaintext"><code>{候选人对应发言的完整原话}</code></pre>
+  </section>
+  <section name="flagged-only">
+    <blockquote><p>{原话或定位、考察意图及其依据、诊断和具体改进方向}</p></blockquote>
+    <callout background-color="light-yellow" border-color="yellow"><p></p></callout>
+  </section>
+  <section name="round-end">
+    <h2>本轮报告</h2>
+    <p>{综合分／100、覆盖题数、主要优势和本轮短板，以题号举证}</p>
+    <p>{五维分别列分数、有效题数、证据及未考察或无法评价的原因}</p>
+    <p>{🔴 关键失误与建议；🟡 增强机会与建议；下次优先准备的动作}</p>
+    <h2>附录｜完整逐字稿</h2>
+    <pre lang="plaintext"><code>{按原序逐段保留定位、说话人和原话}</code></pre>
+    <p>本轮记录结束｜{同一材料标识}</p>
+  </section>
+</template>
