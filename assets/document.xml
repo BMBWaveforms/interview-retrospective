@@ -35,9 +35,9 @@ pre写入后必须设置并回读code.style.wrap=true；XML本身不保证自动
     <!-- 在此唯一可读锚点后插入真实原视频；指纹只记本地清单。 -->
   </section>
   <section name="question">
-    <h2>{可选🔴或🟡}{题号或追问号}｜{面试官原话}</h2>
+    <h2>{可选🔴或🟡}{题号或追问号}｜{仅整理标点的面试官原话}</h2>
     <p>{回答时间定位}</p>
-    <pre lang="plaintext"><code>{对应发言的完整原话；写后开启原生自动换行}</code></pre>
+    <pre lang="plaintext"><code>{对应发言的完整原话；补齐标点、保留用词；写后开启原生自动换行}</code></pre>
   </section>
   <section name="flagged-only">
     <blockquote><p>{依据、诊断与具体改进方向}</p></blockquote>
