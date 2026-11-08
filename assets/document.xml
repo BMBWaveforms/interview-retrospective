@@ -1,36 +1,62 @@
-<!-- 这是构建模板。template/section 是本地分段标识，不能写入飞书。
-只将选定 section 的子节点序列化为 DocxXML。占位内容均需替换。 -->
+<!-- 本地模板；只序列化选定section的子节点，替换全部占位内容。
+pre写入后必须设置并回读code.style.wrap=true；XML本身不保证自动换行。 -->
 <template>
   <section name="company-header">
     <h1>岗位 JD</h1>
-    <h2>{岗位全称}｜{JD 版本或记录标识}</h2>
-    <p>公司：{确认的公司名}</p>
-    <p>JD 原文链接：<a href="{实际 JD URL}">{实际 JD URL}</a></p>
-    <p>{JD 原文首段；按原次序复制全部段落、列表、表格及链接}</p>
+    <table>
+      <colgroup><col width="120"/><col width="600"/></colgroup>
+      <tbody>
+        <tr><td>公司</td><td>{确认的公司全称}</td></tr>
+        <tr><td>岗位</td><td>{岗位全称}</td></tr>
+        <tr><td>JD快照</td><td>{可读的读取日期及来源更新日期}</td></tr>
+        <tr><td>来源</td><td><a href="{实际JD URL}">查看岗位原文</a></td></tr>
+        <!-- 使用者提供了独立JD索引时，可补充其可读链接；未提供则不生成索引链接。 -->
+      </tbody>
+    </table>
+    <h2>岗位要求原文</h2>
+    <table>
+      <colgroup><col width="100"/><col width="640"/></colgroup>
+      <thead><tr><th>类别</th><th>JD原文</th></tr></thead>
+      <!-- 每类一行；仅保留原JD实际提供的类别。编号只保留原文中的一次，不加序号列或自动列表。 -->
+      <tbody>
+        <tr><td><b>岗位职责</b></td><td><p>{全部职责原文集中在此，原条目之间用br换行}</p></td></tr>
+        <tr><td><b>任职资格</b></td><td><p>{全部资格原文集中在此，核心技能等子标题保留一次}</p></td></tr>
+        <tr><td><b>加分项</b></td><td><p>{全部加分项原文集中在此；原JD未提供则删除此行}</p></td></tr>
+      </tbody>
+    </table>
   </section>
   <section name="round">
-    <h1>{一面}（{HR／业务／技术面}）</h1>
-    <p>{岗位、JD 版本、可核实的日期}｜材料标识 {sha256}</p>
+    <h1>{一面／二面等轮次及HR／业务／技术类型}｜{已确认的日期与时间}</h1>
+    <p>{岗位、可读JD版本、原文件名及已知面试结果}</p>
+    <p>AI自动复核；识别不确定处不作扣分依据。</p>
   </section>
   <section name="video-only">
-    <p>原视频 {序号}｜{原文件名}｜{本轮材料标识}｜{文件 SHA-256}</p>
-    <!-- 在此唯一锚点后单独插入真实媒体文件。 -->
+    <p>原视频｜{面试日期与轮次}｜{原文件名}</p>
+    <!-- 在此唯一可读锚点后插入真实原视频；指纹只记本地清单。 -->
   </section>
   <section name="question">
-    <h2>{可选 🔴 或 🟡}{题号或追问号}｜{面试官原话}</h2>
-    <pre lang="plaintext"><code>{候选人对应发言的完整原话}</code></pre>
+    <h2>{可选🔴或🟡}{题号或追问号}｜{面试官原话}</h2>
+    <p>{回答时间定位}</p>
+    <pre lang="plaintext"><code>{对应发言的完整原话；写后开启原生自动换行}</code></pre>
   </section>
   <section name="flagged-only">
-    <blockquote><p>{原话或定位、考察意图及其依据、诊断和具体改进方向}</p></blockquote>
+    <blockquote><p>{依据、诊断与具体改进方向}</p></blockquote>
     <callout background-color="light-yellow" border-color="yellow"><p></p></callout>
   </section>
   <section name="round-end">
     <h2>本轮报告</h2>
-    <p>{综合分／100、覆盖题数、主要优势和本轮短板，以题号举证}</p>
-    <p>{五维分别列分数、有效题数、证据及未考察或无法评价的原因}</p>
-    <p>{🔴 关键失误与建议；🟡 增强机会与建议；下次优先准备的动作}</p>
-    <h2>附录｜完整逐字稿</h2>
-    <pre lang="plaintext"><code>{按原序逐段保留定位、说话人和原话}</code></pre>
-    <p>本轮记录结束｜{同一材料标识}</p>
+    <table>
+      <thead><tr><th>综合分 /100</th><th>有效评分题</th><th>🔴关键失误</th><th>🟡可增强</th></tr></thead>
+      <tbody><tr><td><b>{综合分}</b></td><td>{有效题数}</td><td>{红题数}</td><td>{黄题数}</td></tr></tbody>
+    </table>
+    <table>
+      <thead><tr><th>维度</th><th>得分 /5</th><th>可视条</th><th>有效题数</th><th>本轮证据</th></tr></thead>
+      <tbody><tr><td>{五维各占一行}</td><td>{分数或未考察}</td><td>{统一十格近似条；未考察留空}</td><td>{题数}</td><td>{题号及简短理由}</td></tr></tbody>
+    </table>
+    <p>可视条每格代表0.5分，近似显示，数值为准。未考察与无法评价不按零分计算。</p>
+    <p><b>优势：</b>{带本轮题号的简短结论}</p>
+    <p><b>优先回看：</b>{关键题号和简短原因}</p>
+    <ol><li>{每个真实准备动作各占一项}</li></ol>
+    <p>{本轮覆盖边界与必要局限；报告到此结束}</p>
   </section>
 </template>
